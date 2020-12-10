@@ -31,9 +31,14 @@ def check_cpu_usage():
 
 
 def main():
-    if check_cpu_usage():
-        print ("Error, CPU Usage is Too High!")
-        sys.exit(1)
+    checks=[
+        (check_cpu_usage, "CPU Usage too high!"),
+        (check_root_full, "Root partition full"),
+    ]
+    for check, msg in checks:
+        if check():
+            print (msg)
+            sys.exit(1)
     if check_root_full():
         print("Root partition is full.")
         sys.exit(1)
