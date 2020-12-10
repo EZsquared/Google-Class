@@ -3,7 +3,16 @@
 import sys
 import shutil
 import psutil
+import socket
 
+
+def check_no_network():
+    """Returns True if the root partition is full, False otherwise."""
+    try:
+        socket.gethostbyname("www.google.com")
+        return False
+    except:
+	return True
 
 def check_disk_full(disk, min_gb, min_percent):
     du = shutil.disk_usage(disk)
@@ -34,6 +43,7 @@ def main():
     checks=[
         (check_cpu_usage, "CPU Usage too high!"),
         (check_root_full, "Root partition full"),
+        (check_no_network, "No Working Network"),
     ]
     everything_ok= True
 
