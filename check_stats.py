@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-
+import os
 import sys
 import shutil
 import psutil
 import socket
 
+def check_reboot():
+    """Returns True  if the computer has a pending reboot"""
+    return os.path.exists("/run/reboot-required")
 
 def check_no_network():
     """Returns True if the root partition is full, False otherwise."""
@@ -12,7 +15,7 @@ def check_no_network():
         socket.gethostbyname("www.google.com")
         return False
     except:
-	return True
+        return True
 
 def check_disk_full(disk, min_gb, min_percent):
     du = shutil.disk_usage(disk)
@@ -41,6 +44,7 @@ def check_cpu_usage():
 
 def main():
     checks=[
+        (check_reboot, "Reboot Required"),
         (check_cpu_usage, "CPU Usage too high!"),
         (check_root_full, "Root partition full"),
         (check_no_network, "No Working Network"),
